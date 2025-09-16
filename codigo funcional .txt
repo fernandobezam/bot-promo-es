@@ -1,0 +1,83 @@
+import requests
+import asyncio
+from telegram import Bot, InputFile
+import io
+
+# --- SUAS CREDENCIAIS ---
+# Seu Token do BotFather
+TELEGRAM_TOKEN = "8088502628:AAFM7CUi3qL8TxEtP8VL3rijmwx7p7X0tiM" 
+
+# Seu Chat ID
+CHAT_ID = "-1002988443967" 
+# --- FIM DAS CREDENCIAIS ---
+
+async def get_products_from_api():
+    """
+    Função para buscar produtos de uma API de teste e retornar uma lista.
+    Este é o código que você irá adaptar para a API da Lomadee no futuro.
+    """
+    try:
+        # Usando a Fake Store API como exemplo de API de produtos.
+        response = requests.get("https://fakestoreapi.com/products?limit=3")
+        response.raise_for_status()
+        products = response.json()
+        
+        product_list = []
+        for product in products:
+            product_list.append({
+                'title': product['title'],
+                'price': f"US$ {product['price']}",
+                'link': f"https://fakestore.com/products/{product['id']}",
+                'image_url': product['image']
+            })
+        return product_list
+    except requests.exceptions.RequestException as e:
+        print(f"Erro ao acessar a API de teste: {e}")
+        return []
+
+async def send_product_to_telegram(product):
+    """
+    Função assíncrona para enviar um produto, com foto e texto, para o Telegram.
+    Agora ela baixa o conteúdo da imagem antes de enviar, para maior confiabilidade.
+    """
+    bot = Bot(token=TELEGRAM_TOKEN)
+    
+    caption = (f"🔥 **{product['title']}**\n"
+               f"💰 Preço: {product['price']}\n\n"
+               f"🔗 [Clique para conferir!]({product['link']})")
+    
+    try:
+        # Faz o download do conteúdo da imagem de forma robusta.
+        response = requests.get(product['image_url'], stream=True)
+        response.raise_for_status()
+        
+        # Envia a foto como um objeto de arquivo em memória.
+        await bot.send_photo(
+            chat_id=CHAT_ID,
+            photo=io.BytesIO(response.content),
+            caption=caption,
+            parse_mode='Markdown'
+        )
+        print(f"Mensagem enviada com sucesso: {product['title']}")
+    except Exception as e:
+        print(f"Erro ao enviar a mensagem para o Telegram. Erro: {e}")
+
+async def main():
+    """
+    Função principal que orquestra a busca e o envio dos produtos.
+    """
+    print("Iniciando o bot...")
+    
+    products = await get_products_from_api()
+    
+    if products:
+        print(f"Encontrados {len(products)} produtos na API. Enviando para o Telegram...")
+        for product in products:
+            await send_product_to_telegram(product)
+            await asyncio.sleep(2)
+    else:
+        print("Nenhum produto encontrado. Verifique a conexão com a API de teste.")
+
+if __name__ == "__main__":
+    # Executa a função principal do bot.
+    asyncio.run(main())
