@@ -10,8 +10,8 @@ TELEGRAM_TOKEN = "SEU_TOKEN_BOT"
 CHAT_ID = "-1002988443967"
 
 # --- CREDENCIAIS MERCADO LIVRE ---
-CLIENT_ID = "4617853811180461"
-CLIENT_SECRET = "IGW8CS63levVzZCkGXD8jQGYBn36eaec"
+CLIENT_ID = "8232473809393688"
+CLIENT_SECRET = "YQ9ds9jetpt558uxGzVQ03fVpFOaFF0n"
 TOKEN_FILE = "tokens.json"   # gerado pelo flask_oauth_ml.py
 
 # -------------------- FUNÇÕES AUXILIARES --------------------
