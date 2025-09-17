@@ -3,8 +3,8 @@ import requests
 from flask import Flask, request
 
 # 🔑 Suas credenciais do Mercado Livre Developers
-APP_ID = "4617853811180461"          # Seu App ID
-SECRET_KEY = "IGW8CS63levVzZCkGXD8jQGYBn36eaec"  # Sua chave secreta
+APP_ID = "8232473809393688"          # Seu App ID
+SECRET_KEY = "YQ9ds9jetpt558uxGzVQ03fVpFOaFF0n"  # Sua chave secreta
 
 # 🔹 Coloque aqui o domínio público da Render + /callback
 REDIRECT_URI = "https://bot-promo-es.onrender.com/callback"
